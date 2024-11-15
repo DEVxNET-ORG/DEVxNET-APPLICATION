@@ -97,7 +97,7 @@ def employee_register():
 
         cursor.close()
 
-    return render_template('register.html')
+    return render_template('Pages/register.html')
 
 # Login Route
 @app.route('/employee_login', methods=['GET', 'POST'])
@@ -130,7 +130,7 @@ def employee_login():
 
         cursor.close()
 
-    return render_template('login.html', message=message)
+    return render_template('Pages/login.html', message=message)
 
 @app.route('/logout')
 @login_required
@@ -161,11 +161,7 @@ def dashboard():
     username = profile[0] if profile else "Guest"
 
     # Render the dashboard with the username
-    return render_template('base.html', username=username)
-
-
-
-
+    return render_template('Pages/base.html', username=username)
 
 @app.route('/Customer_Message')
 @login_required
@@ -174,7 +170,7 @@ def Customer_Message():
     cur.execute("SELECT id, firstName, email, Message, created_at FROM contacts ORDER BY created_at")
     contacts = cur.fetchall()
     cur.close()
-    return render_template('Contactus.html', contacts=contacts)
+    return render_template('Pages/Contactus.html', contacts=contacts)
 
 @app.route("/<int:id>/customer", methods=['POST'])
 @login_required
@@ -187,7 +183,7 @@ def deletecustomer(id):
     return redirect(url_for('Customer_Message'))
 
 @app.route('/', methods=['GET', 'POST'])
-def contact():
+def index():
     if request.method == 'POST':
         fname = request.form['firstName']
         lname = request.form['lastName']
@@ -202,12 +198,27 @@ def contact():
         cur.close()
         
         flash('Your message has been sent successfully!')
-        return redirect(url_for('contact'))
+        return redirect(url_for('thankyou'))
     return render_template('index.html')
 
 @app.route('/overall')
+@login_required
 def overall():
-    return render_template('main.html')
+    return render_template('Pages/main.html')
+
+
+@app.route('/getinfo')
+def getinfo():
+    return render_template('Pages/getinfo.html')
+
+@app.route('/showProject')
+def showProject():
+    return render_template('Pages/showProject.html')
+
+@app.route('/thankyou_message')
+def thankyou():
+    return render_template('Pages/thankyou.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
